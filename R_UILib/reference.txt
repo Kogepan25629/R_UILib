@@ -1,43 +1,43 @@
 R_UILib	   Version 0.2.1
 
-å„ã‚¯ãƒ©ã‚¹ã¨é–¢æ•°ã®èª¬æ˜Ž
+ŠeƒNƒ‰ƒX‚ÆŠÖ”‚Ìà–¾
 
-RUI ã‚¯ãƒ©ã‚¹
-é–¢æ•°                void R_UILibInit()
+RUI ƒNƒ‰ƒX
+ŠÖ”                void R_UILibInit()
 
-                    R_UILibã®åˆæœŸåŒ–ã‚’è¡Œã†æœ€åˆã«ä¸€å›žå®Ÿè¡Œã™ã‚‹å¿…è¦ãŒã‚ã‚‹	
+                    R_UILib‚Ì‰Šú‰»‚ðs‚¤Å‰‚Éˆê‰ñŽÀs‚·‚é•K—v‚ª‚ ‚é	
 
                     void UptadeMouseState()
 
-                    ãƒžã‚¦ã‚¹åº§æ¨™ã®å–å¾—ã‚„ã‚¯ãƒªãƒƒã‚¯åˆ¤å®šã‚’è¡Œã†
-                    åŸºæœ¬æ¯Žãƒ•ãƒ¬ãƒ¼ãƒ ã®æœ€åˆã«å‘¼ã³å‡ºã™é–¢æ•°
+                    ƒ}ƒEƒXÀ•W‚ÌŽæ“¾‚âƒNƒŠƒbƒN”»’è‚ðs‚¤
+                    Šî–{–ˆƒtƒŒ[ƒ€‚ÌÅ‰‚ÉŒÄ‚Ño‚·ŠÖ”
 
 
-RUI_Button ã‚¯ãƒ©ã‚¹
-èª¬æ˜Ž                åŸºæœ¬çš„ãªãƒœã‚¿ãƒ³ã®ç”¨ã®ã‚¯ãƒ©ã‚¹
-                    Mode 1 : æ–‡å­—åˆ—ã®é•·ã•ã«å¿œã˜ã¦X2, Y2ã®å€¤ã‚’è¨­å®šã—ã€ãƒœã‚¿ãƒ³ã®ã‚µã‚¤ã‚ºã‚’æ–‡å­—åˆ—ã®ã‚µã‚¤ã‚ºã«åˆã‚ã›ã‚‹ã€‚
-                    Mode 2 : ãƒœã‚¿ãƒ³ã®ä¸Šã«ã‚«ãƒ¼ã‚½ãƒ«ãŒã‚ã‚‹çŠ¶æ…‹ã§ç”»åƒã‚’å¤‰æ›´ã™ã‚‹ã€‚
-                    Mode 3 : ãƒœã‚¿ãƒ³ã®ä¸Šã«ã‚«ãƒ¼ã‚½ãƒ«ãŒã‚ã‚‹çŠ¶æ…‹ã§ç”»åƒã‚’ãƒã‚¤ãƒ©ã‚¤ãƒˆã™ã‚‹ã€‚
-                    Mode 4 : Mode1 ã¨ Mode2
-                    Mode 5 : Mode1 ã¨ Mode3
+RUI_Button ƒNƒ‰ƒX
+à–¾                Šî–{“I‚Èƒ{ƒ^ƒ“‚Ì—p‚ÌƒNƒ‰ƒX
+                    Mode 1 : •¶Žš—ñ‚Ì’·‚³‚É‰ž‚¶‚ÄX2, Y2‚Ì’l‚ðÝ’è‚µAƒ{ƒ^ƒ“‚ÌƒTƒCƒY‚ð•¶Žš—ñ‚ÌƒTƒCƒY‚É‡‚í‚¹‚éB
+                    Mode 2 : ƒ{ƒ^ƒ“‚Ìã‚ÉƒJ[ƒ\ƒ‹‚ª‚ ‚éó‘Ô‚Å‰æ‘œ‚ð•ÏX‚·‚éB
+                    Mode 3 : ƒ{ƒ^ƒ“‚Ìã‚ÉƒJ[ƒ\ƒ‹‚ª‚ ‚éó‘Ô‚Å‰æ‘œ‚ðƒnƒCƒ‰ƒCƒg‚·‚éB
+                    Mode 4 : Mode1 ‚Æ Mode2
+                    Mode 5 : Mode1 ‚Æ Mode3
 
-ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰          int    Mode         ãƒœã‚¿ãƒ³ã®ãƒ¢ãƒ¼ãƒ‰                                          åˆæœŸå€¤ 0
-                    int    X1           ãƒœã‚¿ãƒ³å·¦ä¸Šã®Xåº§æ¨™                                       åˆæœŸå€¤ -1
-                    int    X2           ãƒœã‚¿ãƒ³å³ä¸‹ã®Xåº§æ¨™                                       åˆæœŸå€¤ -1
-                    int    Y1           ãƒœã‚¿ãƒ³å·¦ä¸Šã®Yåº§æ¨™                                       åˆæœŸå€¤ -1
-                    int    Y2           ãƒœã‚¿ãƒ³å³ä¸‹ã®Yåº§æ¨™                                       åˆæœŸå€¤ -1
-                    int    GrHandle     DXLibã®ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒãƒ³ãƒ‰ãƒ«                             åˆæœŸå€¤ -1
-                    itn    GrHandle2    Mode2,4ç”¨ã®ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒãƒ³ãƒ‰ãƒ«                         åˆæœŸå€¤ -1
-                    int    FontHandle   DXLibã®ãƒ•ã‚©ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ«                                 åˆæœŸå€¤ -1
-                    string Str          ãƒœã‚¿ãƒ³ã«è¡¨ç¤ºã™ã‚‹æ–‡å­—åˆ—                                  åˆæœŸå€¤ ""
-                    uint   StrColor     ãƒœã‚¿ãƒ³ã«è¡¨ç¤ºã™ã‚‹æ–‡å­—åˆ—ã®è‰²                              åˆæœŸå€¤ (255, 255, 255)
+ƒtƒB[ƒ‹ƒh          int    Mode         ƒ{ƒ^ƒ“‚Ìƒ‚[ƒh                                          ‰Šú’l 0
+                    int    X1           ƒ{ƒ^ƒ“¶ã‚ÌXÀ•W                                       ‰Šú’l -1
+                    int    X2           ƒ{ƒ^ƒ“‰E‰º‚ÌXÀ•W                                       ‰Šú’l -1
+                    int    Y1           ƒ{ƒ^ƒ“¶ã‚ÌYÀ•W                                       ‰Šú’l -1
+                    int    Y2           ƒ{ƒ^ƒ“‰E‰º‚ÌYÀ•W                                       ‰Šú’l -1
+                    int    GrHandle     DXLib‚ÌƒOƒ‰ƒtƒBƒbƒNƒnƒ“ƒhƒ‹                             ‰Šú’l -1
+                    itn    GrHandle2    Mode2,4—p‚ÌƒOƒ‰ƒtƒBƒbƒNƒnƒ“ƒhƒ‹                         ‰Šú’l -1
+                    int    FontHandle   DXLib‚ÌƒtƒHƒ“ƒgƒnƒ“ƒhƒ‹                                 ‰Šú’l -1
+                    string Str          ƒ{ƒ^ƒ“‚É•\Ž¦‚·‚é•¶Žš—ñ                                  ‰Šú’l ""
+                    uint   StrColor     ƒ{ƒ^ƒ“‚É•\Ž¦‚·‚é•¶Žš—ñ‚ÌF                              ‰Šú’l (255, 255, 255)
 
-é–¢æ•°                int SetString(string str)
+ŠÖ”                int SetString(string str)
 
-                    å¼•æ•°   string str   è¨­å®šã™ã‚‹æ–‡å­—åˆ—
+                    ˆø”   string str   Ý’è‚·‚é•¶Žš—ñ
 
-                    æˆ»ã‚Šå€¤   0 : æˆåŠŸ
-                            -1 : å¤±æ•—
+                    –ß‚è’l   0 : ¬Œ÷
+                            -1 : Ž¸”s
 
-                    èª¬æ˜Ž   ãƒœã‚¿ãƒ³ã«è¡¨ç¤ºã™ã‚‹æ–‡å­—åˆ—ã‚’è¨­å®šã™ã‚‹
-                           ModeãŒ1ã‹3ã®ã¨ãæ–‡å­—åˆ—ã®é•·ã•ã«å¿œã˜ã¦X2, Y2ã®å€¤ã‚’è¨­å®šã—ã€ãƒœã‚¿ãƒ³ã®ã‚µã‚¤ã‚ºã‚’æ–‡å­—åˆ—ã®ã‚µã‚¤ã‚ºã«åˆã‚ã›ã‚‹ã€‚
+                    à–¾   ƒ{ƒ^ƒ“‚É•\Ž¦‚·‚é•¶Žš—ñ‚ðÝ’è‚·‚é
+                           Mode‚ª1‚©3‚Ì‚Æ‚«•¶Žš—ñ‚Ì’·‚³‚É‰ž‚¶‚ÄX2, Y2‚Ì’l‚ðÝ’è‚µAƒ{ƒ^ƒ“‚ÌƒTƒCƒY‚ð•¶Žš—ñ‚ÌƒTƒCƒY‚É‡‚í‚¹‚éB
