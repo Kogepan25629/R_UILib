@@ -1,10 +1,19 @@
 ﻿using DxLibDLL;
 using System;
 
-// Version 0.1
+// Version 0.2
 
 namespace R_UILib
 {
+    static class RUI_Data
+    {
+        public static int GrHandleBlack = DX.MakeGraph(1, 1);
+        public static int GrHandleWhite = DX.MakeGraph(1, 1);
+        public static void _RUI_Data() {
+            DX.FillGraph(GrHandleBlack, 0, 0, 0, 255);
+            DX.FillGraph(GrHandleWhite, 0, 0, 0, 255);
+        }
+    }
     public abstract class RUI_MouseData
     {
         //マウス座標
@@ -183,18 +192,38 @@ namespace R_UILib
 
     }
 
+    // RUIクラス
+    abstract class RUI : RUI_MouseData
+    {
+        // マウス情報の更新
+        // 毎フレーム呼び出しする必要がある
+        public static new void UptadeMouseState()
+        {
+            RUI_MouseData.UptadeMouseState();
+        }
+
+        //RUI_Dataの初期化
+        public static void R_UILibInit()
+        {
+            RUI_Data._RUI_Data();
+        }
+    }
+
     // RUI_Buttonクラス
     class RUI_Button : RUI_MouseData
     {
-        protected int Mode;
-        protected int X1;
-        protected int X2;
-        protected int Y1;
-        protected int Y2;
-        protected int GrHandle;
-        protected int FontHandle;
-        protected uint StrColor;
-        private   string Str;
+        public  int Mode;
+        public  int X1;
+        public  int X2;
+        public  int Y1;
+        public  int Y2;
+        public  int GrHandle;
+        public  int GrHandle2;
+        public  int FontHandle;
+        public  uint StrColor;
+        private string Str;
+        private int StringWidth;
+        private int StringHeight;
         //コンストラクタ
         public RUI_Button()
         {
@@ -204,18 +233,44 @@ namespace R_UILib
             Y1 = -1;
             Y2 = -1;
             GrHandle = -1;
+            GrHandle2 = -1;
             FontHandle = -1;
             StrColor = DX.GetColor(255, 255, 255);
             Str = "";
+            StringWidth = -1;
+            StringHeight = -1;
         }
 
         // ボタンテキスト(Str)の変更
+        public int SetString(string str, int fonthandle)
+        {
+            FontHandle = fonthandle;
+            if (Mode == 1 || Mode == 3 || Mode == 5) {
+                if (X1 != -1 && Y1 != -1 && X2 != -1 && Y2 != -1) {
+                    StringWidth = DX.GetDrawStringWidthToHandle(str, str.Length, FontHandle);
+                    StringHeight = DX.GetFontSizeToHandle(FontHandle);
+                    X2 = X1 + StringWidth;
+                    Y2 = Y1 + StringHeight;
+
+                    return 0;
+                }
+                else {
+                    return -1;
+                }
+            }
+            else {
+                Str = str;
+                return 0;
+            }
+        }
         public int SetString(string str)
         {
-            if (Mode == 1) {
+            if (Mode == 1 || Mode == 4 || Mode == 5) {
                 if (FontHandle != -1 && X1 != -1 && Y1 != -1 && X2 != -1 && Y2 != -1) {
-                    X2 = X1 + DX.GetDrawStringWidthToHandle(str, str.Length, FontHandle);
-                    Y2 = Y1 + DX.GetFontSizeToHandle(FontHandle);
+                    StringWidth = DX.GetDrawStringWidthToHandle(str, str.Length, FontHandle);
+                    StringHeight = DX.GetFontSizeToHandle(FontHandle);
+                    X2 = X1 + StringWidth;
+                    Y2 = Y1 + StringHeight;
 
                     return 0;
                 }
@@ -231,56 +286,98 @@ namespace R_UILib
 
 
         //ボタン描画
-        protected void Show()
+        public int Show()
         {
-            if (GrHandle != -1) {
+            if (GrHandle != -1 && X1 != -1 && Y1 != -1 && X2 != -1 && Y2 != -1) {
+                if (Mode == 0 || Mode == 1) {
+                    //画像の描画
+                    DX.DrawExtendGraph(X1, Y1, X2, Y2, GrHandle, DX.TRUE);
+                    //文字列の描画
+                    if (Str == "") {
+                    }
+                    else if (Mode == 1 || Mode == 4 || Mode == 5) {
+                        DX.DrawString(X1, Y1, Str, StrColor);
+                    }
+                    else {
+                        DX.DrawString(X1 + (((X2 - X1) - StringWidth) / 2), Y1 + (((Y2 - Y1) - DX.GetFontSizeToHandle(StringHeight)) / 2), Str, StrColor);
+                    }
+                    return 0;
+                }else if (Mode == 2 || Mode == 4) {
+                    //画像の描画
+                    if (MousePointX >= X1 && MousePointX <= X2 && MousePointY >= Y1 && MousePointY <= Y2) {
+                        DX.DrawExtendGraph(X1, Y1, X2, Y2, GrHandle2, DX.TRUE);
+                    }
+                    else {
+                        DX.DrawExtendGraph(X1, Y1, X2, Y2, GrHandle, DX.TRUE);
+                    }
+                    //文字列の描画
+                    if (Str == "") {
 
+                    }
+                    else {
+                        DX.DrawString(X1, Y1, Str, StrColor);
+                    }
+                    return 0;
+                }else if (Mode == 3 || Mode == 5) {
+                    //画像の描画
+                    if (MousePointX >= X1 && MousePointX <= X2 && MousePointY >= Y1 && MousePointY <= Y2) {
+                        DX.DrawExtendGraph(X1, Y1, X2, Y2, RUI_Data.GrHandleBlack, DX.TRUE);
+                    }
+                    else {
+                        DX.DrawExtendGraph(X1, Y1, X2, Y2, RUI_Data.GrHandleWhite, DX.TRUE);
+                    }
+                    DX.DrawExtendGraph(X1 + 1, Y1 + 1, X2 - 1, Y2 - 1, GrHandle, DX.TRUE);
+                    //文字列の描画
+                    if (Str == "") {
+
+                    }
+                    else {
+                        DX.DrawString(X1, Y1, Str, StrColor);
+                    }
+                    return 0;
+                }
+                else {
+                    return -1;
+                }
+            }
+            else {
+                return -1;
             }
         }
 
         //左クリックの判定
-        protected bool LeftDetection()
+        public  bool LeftDetection()
         {
             return MouseClickLeftDetection(X1, Y1, X2, Y2);
         }
         //右クリックの判定
-        protected bool RightDetection()
+        public  bool RightDetection()
         {
             return MouseClickLeftDetection(X1, Y1, X2, Y2);
         }
         //左クリックアップの判定
-        protected bool LeftUpDetection()
+        public  bool LeftUpDetection()
         {
             return MouseClickUpLeftDetection(X1, Y1, X2, Y2);
         }
         //右クリックアップの判定
-        protected bool RightUpDetection()
+        public  bool RightUpDetection()
         {
             return MouseClickUpRightDetection(X1, Y1, X2, Y2);
         }
         //左クリックダウンの判定
-        protected bool LeftDownDetection()
+        public  bool LeftDownDetection()
         {
             return MouseClickDownLeftDetection(X1, Y1, X2, Y2);
         }
         //右クリックダウンの判定
-        protected bool RightDownDetection()
+        public  bool RightDownDetection()
         {
             return MouseClickDownRightDetection(X1, Y1, X2, Y2);
         }
     }
-    // RUIクラス
-    abstract class RUI : RUI_MouseData
-    {
-        // マウス情報の更新
-        // 毎フレーム呼び出しする必要がある
-        public static new void UptadeMouseState()
-        {
-            RUI_MouseData.UptadeMouseState();
-        }
-    }
-
-
+    
+    /*
     class RUI_ButtonImage : RUI_MouseData
     {
         // 画像のみ
@@ -357,5 +454,6 @@ namespace R_UILib
             }
         }
     }
+    */
 }
 
