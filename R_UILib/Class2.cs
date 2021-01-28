@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DxLibDLL;
 using R_UILib;
-
+//
 namespace R_RPG
 {
     class Class2
