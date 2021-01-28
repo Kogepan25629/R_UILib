@@ -1,19 +1,29 @@
-﻿R_UILib	   Ver.1.0
+﻿R_UILib	   Version 0.1
 各クラスと関数の説明
 
 RUI クラス
-	void UptadeMouseState()
+関数				void UptadeMouseState()
 
-	マウス座標の取得やクリック判定を行う
-	基本毎フレームの最初に呼び出す関数
+					マウス座標の取得やクリック判定を行う
+					基本毎フレームの最初に呼び出す関数
 
 RUI_Button クラス
-フィールド
-	int X1              ボタン左上のX座標                                       初期値 -1
-	int X2              ボタン右下のX座標                                       初期値 -1
-	int Y1              ボタン左上のY座標                                       初期値 -1
-	int Y2              ボタン右下のY座標                                       初期値 -1
-	int GrHandle        DXLibのグラフィックハンドル                             初期値 -1
-	int FontHandle      DXLibのフォントハンドル                                 初期値 -1
-	string Str          ボタンに表示する文字列                                  初期値 ""
-	uint StrColor       ボタンに表示する文字列の色                              初期値 (255, 255, 255)
+フィールド			int    Mode         ボタンのモード                                          初期値 0
+					int    X1           ボタン左上のX座標                                       初期値 -1
+					int    X2           ボタン右下のX座標                                       初期値 -1
+					int    Y1           ボタン左上のY座標                                       初期値 -1
+					int    Y2           ボタン右下のY座標                                       初期値 -1
+					int    GrHandle     DXLibのグラフィックハンドル                             初期値 -1
+					int    FontHandle   DXLibのフォントハンドル                                 初期値 -1
+					string Str          ボタンに表示する文字列                                  初期値 ""
+					uint   StrColor     ボタンに表示する文字列の色                              初期値 (255, 255, 255)
+
+関数				int SetString(string str)
+
+					引数   string str   設定する文字列
+
+					戻り値   0 : 成功
+							-1 : 失敗
+
+					説明   ボタンに表示する文字列を設定する
+						   Modeが1のとき文字列の長さに応じてX2, Y2の値を設定し、ボタンのサイズを文字列のサイズに合わせる。

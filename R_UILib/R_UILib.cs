@@ -1,6 +1,8 @@
 ﻿using DxLibDLL;
 using System;
 
+// Version 0.1
+
 namespace R_UILib
 {
     public abstract class RUI_MouseData
@@ -117,35 +119,154 @@ namespace R_UILib
                 }
             }
         }
-        
-        protected static bool MouseClickUpLeftDetection(int x1, int y1, int x2, int y2)
+
+        //左クリックの判定
+        protected static bool MouseClickLeftDetection(int x1, int y1, int x2, int y2)
         {
-            if (MouseClickUpLeft == true && MouseClickUpLeftPointX >= x1 && MouseClickUpLeftPointX <= x2 && MouseClickUpLeftPointY >= x1 && MouseClickUpLeftPointY <= y2 && MouseClickDownLeftPointX >= x1 && MouseClickDownLeftPointX <= x2 && MouseClickDownLeftPointY >= y1 && MouseClickDownLeftPointY <= y2) {
+            if (MouseClickLeft == true && MousePointX >= x1 && MousePointX <= x2 && MousePointY >= y1 && MousePointY <= y2) {
                 return true;
             }
             else {
                 return false;
             }
         }
-        
+        //左クリックの判定
+        protected static bool MouseClickRightDetection(int x1, int y1, int x2, int y2)
+        {
+            if (MouseClickRight == true && MousePointX >= x1 && MousePointX <= x2 && MousePointY >= y1 && MousePointY <= y2) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        //左クリックアップの判定
+        protected static bool MouseClickUpLeftDetection(int x1, int y1, int x2, int y2)
+        {
+            if (MouseClickUpLeft == true && MouseClickUpLeftPointX >= x1 && MouseClickUpLeftPointX <= x2 && MouseClickUpLeftPointY >= y1 && MouseClickUpLeftPointY <= y2 && MouseClickDownLeftPointX >= x1 && MouseClickDownLeftPointX <= x2 && MouseClickDownLeftPointY >= y1 && MouseClickDownLeftPointY <= y2) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        //右クリックアップの判定
+        protected static bool MouseClickUpRightDetection(int x1, int y1, int x2, int y2)
+        {
+            if (MouseClickUpRight == true && MouseClickUpRightPointX >= x1 && MouseClickUpRightPointX <= x2 && MouseClickUpRightPointY >= y1 && MouseClickUpRightPointY <= y2 && MouseClickDownRightPointX >= x1 && MouseClickDownRightPointX <= x2 && MouseClickDownRightPointY >= y1 && MouseClickDownRightPointY <= y2) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        //左クリックダウンの判定
+        protected static bool MouseClickDownLeftDetection(int x1, int y1, int x2, int y2)
+        {
+            if (MouseClickDownLeft == true && MouseClickDownLeftPointX >= x1 && MouseClickDownLeftPointX <= x2 && MouseClickDownLeftPointY >= y1 && MouseClickDownLeftPointY <= y2) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        //右クリックダウンの判定
+        protected static bool MouseClickDownRightDetection(int x1, int y1, int x2, int y2)
+        {
+            if (MouseClickDownRight == true && MouseClickDownRightPointX >= x1 && MouseClickDownRightPointX <= x2 && MouseClickDownRightPointY >= y1 && MouseClickDownRightPointY <= y2) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
     }
 
     // RUI_Buttonクラス
-    abstract class RUI_Button : RUI_MouseData
+    class RUI_Button : RUI_MouseData
     {
-        protected static int X1 = -1;
-        protected static int X2 = -1;
-        protected static int Y1 = -1;
-        protected static int Y2 = -1;
-        protected static int GrHandle = -1;
-        protected static int FontHandle = -1;
-        protected static uint StrColor = DX.GetColor(255, 255, 255);
-        protected static string Str = "";
+        protected int Mode;
+        protected int X1;
+        protected int X2;
+        protected int Y1;
+        protected int Y2;
+        protected int GrHandle;
+        protected int FontHandle;
+        protected uint StrColor;
+        private   string Str;
+        //コンストラクタ
+        public RUI_Button()
+        {
+            Mode = 0;
+            X1 = -1;
+            X2 = -1;
+            Y1 = -1;
+            Y2 = -1;
+            GrHandle = -1;
+            FontHandle = -1;
+            StrColor = DX.GetColor(255, 255, 255);
+            Str = "";
+        }
 
+        // ボタンテキスト(Str)の変更
+        public int SetString(string str)
+        {
+            if (Mode == 1) {
+                if (FontHandle != -1 && X1 != -1 && Y1 != -1 && X2 != -1 && Y2 != -1) {
+                    X2 = X1 + DX.GetDrawStringWidthToHandle(str, str.Length, FontHandle);
+                    Y2 = Y1 + DX.GetFontSizeToHandle(FontHandle);
+
+                    return 0;
+                }
+                else {
+                    return -1;
+                }
+            }
+            else {
+                Str = str;
+                return 0;
+            }
+        }
+
+
+        //ボタン描画
+        protected void Show()
+        {
+            if (GrHandle != -1) {
+
+            }
+        }
+
+        //左クリックの判定
+        protected bool LeftDetection()
+        {
+            return MouseClickLeftDetection(X1, Y1, X2, Y2);
+        }
+        //右クリックの判定
+        protected bool RightDetection()
+        {
+            return MouseClickLeftDetection(X1, Y1, X2, Y2);
+        }
         //左クリックアップの判定
-        protected static bool LeftUpDetection()
+        protected bool LeftUpDetection()
         {
             return MouseClickUpLeftDetection(X1, Y1, X2, Y2);
+        }
+        //右クリックアップの判定
+        protected bool RightUpDetection()
+        {
+            return MouseClickUpRightDetection(X1, Y1, X2, Y2);
+        }
+        //左クリックダウンの判定
+        protected bool LeftDownDetection()
+        {
+            return MouseClickDownLeftDetection(X1, Y1, X2, Y2);
+        }
+        //右クリックダウンの判定
+        protected bool RightDownDetection()
+        {
+            return MouseClickDownRightDetection(X1, Y1, X2, Y2);
         }
     }
     // RUIクラス
