@@ -1,4 +1,4 @@
-﻿R_UILib	   Version 0.2
+﻿R_UILib	   Version 0.2.1
 
 各クラスと関数の説明
 

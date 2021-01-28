@@ -1,7 +1,7 @@
 ﻿using DxLibDLL;
 using System;
 
-// Version 0.2
+// Version 0.2.1
 
 namespace R_UILib
 {
@@ -11,7 +11,7 @@ namespace R_UILib
         public static int GrHandleWhite = DX.MakeGraph(1, 1);
         public static void _RUI_Data() {
             DX.FillGraph(GrHandleBlack, 0, 0, 0, 255);
-            DX.FillGraph(GrHandleWhite, 0, 0, 0, 255);
+            DX.FillGraph(GrHandleWhite, 255, 255, 255, 255);
         }
     }
     public abstract class RUI_MouseData
@@ -244,10 +244,11 @@ namespace R_UILib
         // ボタンテキスト(Str)の変更
         public int SetString(string str, int fonthandle)
         {
+            Str = str;
             FontHandle = fonthandle;
             if (Mode == 1 || Mode == 3 || Mode == 5) {
-                if (X1 != -1 && Y1 != -1 && X2 != -1 && Y2 != -1) {
-                    StringWidth = DX.GetDrawStringWidthToHandle(str, str.Length, FontHandle);
+                if (X1 != -1 && Y1 != -1) {
+                    StringWidth = DX.GetDrawStringWidthToHandle(Str, Str.Length, FontHandle);
                     StringHeight = DX.GetFontSizeToHandle(FontHandle);
                     X2 = X1 + StringWidth;
                     Y2 = Y1 + StringHeight;
@@ -259,15 +260,15 @@ namespace R_UILib
                 }
             }
             else {
-                Str = str;
                 return 0;
             }
         }
         public int SetString(string str)
         {
+            Str = str;
             if (Mode == 1 || Mode == 4 || Mode == 5) {
-                if (FontHandle != -1 && X1 != -1 && Y1 != -1 && X2 != -1 && Y2 != -1) {
-                    StringWidth = DX.GetDrawStringWidthToHandle(str, str.Length, FontHandle);
+                if (FontHandle != -1 && X1 != -1 && Y1 != -1) {
+                    StringWidth = DX.GetDrawStringWidthToHandle(Str, Str.Length, FontHandle);
                     StringHeight = DX.GetFontSizeToHandle(FontHandle);
                     X2 = X1 + StringWidth;
                     Y2 = Y1 + StringHeight;
@@ -279,7 +280,6 @@ namespace R_UILib
                 }
             }
             else {
-                Str = str;
                 return 0;
             }
         }
@@ -302,7 +302,7 @@ namespace R_UILib
                         DX.DrawString(X1 + (((X2 - X1) - StringWidth) / 2), Y1 + (((Y2 - Y1) - DX.GetFontSizeToHandle(StringHeight)) / 2), Str, StrColor);
                     }
                     return 0;
-                }else if (Mode == 2 || Mode == 4) {
+                }else if ((Mode == 2 || Mode == 4) && GrHandle2 != -1) {
                     //画像の描画
                     if (MousePointX >= X1 && MousePointX <= X2 && MousePointY >= Y1 && MousePointY <= Y2) {
                         DX.DrawExtendGraph(X1, Y1, X2, Y2, GrHandle2, DX.TRUE);
@@ -321,10 +321,10 @@ namespace R_UILib
                 }else if (Mode == 3 || Mode == 5) {
                     //画像の描画
                     if (MousePointX >= X1 && MousePointX <= X2 && MousePointY >= Y1 && MousePointY <= Y2) {
-                        DX.DrawExtendGraph(X1, Y1, X2, Y2, RUI_Data.GrHandleBlack, DX.TRUE);
+                        DX.DrawExtendGraph(X1, Y1, X2, Y2, RUI_Data.GrHandleWhite, DX.TRUE);
                     }
                     else {
-                        DX.DrawExtendGraph(X1, Y1, X2, Y2, RUI_Data.GrHandleWhite, DX.TRUE);
+                        DX.DrawExtendGraph(X1, Y1, X2, Y2, RUI_Data.GrHandleBlack, DX.TRUE);
                     }
                     DX.DrawExtendGraph(X1 + 1, Y1 + 1, X2 - 1, Y2 - 1, GrHandle, DX.TRUE);
                     //文字列の描画
