@@ -53,7 +53,7 @@ namespace R_RPG
             Button1.Y1 = 0;
             Button1.X2 = 100;
             Button1.Y2 = 100;
-            Button1.Mode = 5;
+            Button1.Mode = 3;
             Button1.GrHandle = grhandle;
             Button1.SetString("おはよう", FontHandle);
 

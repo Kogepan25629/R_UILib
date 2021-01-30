@@ -1,7 +1,7 @@
 ﻿using DxLibDLL;
 using System;
 
-// Version 0.3.2
+// Version 0.3.3
 
 namespace R_UILib
 {
@@ -246,22 +246,20 @@ namespace R_UILib
         {
             Str = str;
             FontHandle = fonthandle;
+            StringWidth = DX.GetDrawStringWidthToHandle(Str, Str.Length, FontHandle);
+            StringHeight = DX.GetFontSizeToHandle(FontHandle);
+
             if (Mode == 1 || Mode == 4 || Mode == 5) {
                 if (X1 != -1 && Y1 != -1) {
-                    StringWidth = DX.GetDrawStringWidthToHandle(Str, Str.Length, FontHandle);
-                    StringHeight = DX.GetFontSizeToHandle(FontHandle);
                     X2 = X1 + StringWidth;
                     Y2 = Y1 + StringHeight;
-
                     return 0;
                 }
                 else {
                     return -1;
                 }
             }
-            else {
-                return 0;
-            }
+            return 0;
         }
         public int SetString(string str)
         {
@@ -312,7 +310,7 @@ namespace R_UILib
                         DX.DrawString(X1, Y1, Str, StrColor);
                     }
                     else {
-                        DX.DrawString(X1 + (((X2 - X1) - StringWidth) / 2), Y1 + (((Y2 - Y1) - DX.GetFontSizeToHandle(StringHeight)) / 2), Str, StrColor);
+                        DX.DrawString(X1 + (((X2 - X1) - StringWidth) / 2), Y1 + (((Y2 - Y1) - StringHeight) / 2), Str, StrColor);
                     }
                     return 0;
                 }else if ((Mode == 2 || Mode == 4) && GrHandle2 != -1) {
@@ -331,7 +329,7 @@ namespace R_UILib
                         DX.DrawString(X1, Y1, Str, StrColor);
                     }
                     else {
-                        DX.DrawString(X1 + (((X2 - X1) - StringWidth) / 2), Y1 + (((Y2 - Y1) - DX.GetFontSizeToHandle(StringHeight)) / 2), Str, StrColor);
+                        DX.DrawString(X1 + (((X2 - X1) - StringWidth) / 2), Y1 + (((Y2 - Y1) - StringHeight) / 2), Str, StrColor);
                     }
                     return 0;
                 }else if (Mode == 3 || Mode == 5) {
@@ -351,7 +349,8 @@ namespace R_UILib
                         DX.DrawString(X1, Y1, Str, StrColor);
                     }
                     else {
-                        DX.DrawString(X1 + (((X2 - X1) - StringWidth) / 2), Y1 + (((Y2 - Y1) - DX.GetFontSizeToHandle(StringHeight)) / 2), Str, StrColor);
+                        //Console.WriteLine(StringWidth);
+                        DX.DrawString(X1 + (((X2 - X1) - StringWidth) / 2), Y1 + (((Y2 - Y1) - StringHeight) / 2), Str, StrColor);
                     }
                     return 0;
                 }
