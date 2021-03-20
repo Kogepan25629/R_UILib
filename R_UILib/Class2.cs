@@ -37,7 +37,6 @@ namespace R_RPG
             {
                 return;
             }
-
             //描写を裏画面に指定
             DX.SetDrawScreen(DX.DX_SCREEN_BACK);
 
@@ -48,21 +47,19 @@ namespace R_RPG
             int grhandle = DX.LoadGraph("Texture\\diamond_block.png");
 
             RUI.R_UILibInit();
-            RUI_Button Button1 = new RUI_Button();
-            Button1.X1 = 0;
-            Button1.Y1 = 0;
-            Button1.X2 = 100;
-            Button1.Y2 = 100;
-            Button1.Mode = 3;
+            RUI_Button Button1 = new RUI_Button(false, true);
+            Button1.X1 = 3;
+            Button1.SetPoint(0, 0, 100, 100);
             Button1.GrHandle = grhandle;
-            Button1.SetString("おはよう", FontHandle);
+            Button1.FontHandle = FontHandle;
+            Button1.SetString("おはよう");
 
             while (DX.ScreenFlip() == 0 && DX.ProcessMessage() == 0 && DX.ClearDrawScreen() == 0)
             {
                 RUI.UptadeMouseState();
 
                 Button1.Show();
-                if (Button1.LeftUpDetection() == true)
+                if (Button1.DetectMouseClick(RUI_Button.LEFT, RUI_Button.UP) == true)
                 {
                     Console.WriteLine("Clicked");
                 }
