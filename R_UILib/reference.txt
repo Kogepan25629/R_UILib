@@ -1,8 +1,15 @@
-﻿R_UILib	   Version 0.5.0
+﻿R_UILib	   Version 0.5.1
 
 各クラスと関数の説明
 
 RUI クラス
+定数
+                    int    RIGHT
+                    int    LEFT
+                    int    UP
+                    int    DOWN
+                    int    HOLD
+
 関数                void R_UILibInit()
 
                     説明   R_UILibの初期化を行う最初に一回実行する必要がある	
@@ -32,13 +39,6 @@ RUI_Button クラス
                     int    FontHandle           DXLibのフォントハンドル                                 初期値 -1
                     string Str                  ボタンに表示する文字列                                  初期値 ""
                     uint   StrColor             ボタンに表示する文字列の色                              初期値 DX.GetColor(255, 255, 255)
-
-                    定数
-                    int    RIGHT
-                    int    LEFT
-                    int    UP
-                    int    DOWN
-                    int    HOLD
 
 
 関数                int SetString(string str)
@@ -77,8 +77,8 @@ RUI_Button クラス
 
                     bool DetectMouseClick(int LeftRight, int UpDown)
 
-                    引数   int LeftRight     RIGHT  LEFT のどちらかを指定
-                           int UpDown        DOWN  UP  HOLD のどれかを指定
+                    引数   int LeftRight     RUI.RIGHT  RUI.LEFT のどちらかを指定
+                           int UpDown        RUI.DOWN  RUI.UP  RUI.HOLD のどれかを指定
 
                     説明   ボタンがマウスクリックされた場合trueされていない場合はfalseを返す
                            LeftRightには右クリックと左クリックのどちらで判定するか指定

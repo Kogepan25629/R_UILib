@@ -59,7 +59,7 @@ namespace R_RPG
                 RUI.UptadeMouseState();
 
                 Button1.Show();
-                if (Button1.DetectMouseClick(RUI_Button.LEFT, RUI_Button.UP) == true)
+                if (Button1.DetectMouseClick(RUI.LEFT, RUI.UP) == true)
                 {
                     Console.WriteLine("Clicked");
                 }

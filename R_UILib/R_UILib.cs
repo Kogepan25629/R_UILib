@@ -1,6 +1,6 @@
 ﻿using DxLibDLL;
 
-// Version 0.5.0
+// Version 0.5.1
 
 namespace R_UILib
 {
@@ -288,6 +288,12 @@ namespace R_UILib
     // RUIクラス
     class RUI : RUI_MouseData
     {
+        //定数
+        public const int RIGHT = 0;
+        public const int LEFT = 1;
+        public const int HOLD = 0;
+        public const int UP = 1;
+        public const int DOWN = 2;
         // マウス情報の更新
         // 毎フレーム呼び出しする必要がある
         public static new void UptadeMouseState()
@@ -424,12 +430,7 @@ namespace R_UILib
         }
 
         //// マウスクリックの判定
-        //定数
-        public const int RIGHT = 0;
-        public const int LEFT = 1;
-        public const int HOLD = 0;
-        public const int UP = 1;
-        public const int DOWN = 2;
+
         public bool DetectMouseClick(int LeftRight, int UpDown)
         {
             // ボタンサイズを文字列に合わせる(モードにより)
@@ -437,18 +438,18 @@ namespace R_UILib
                 return false;
             }
             switch (LeftRight) {
-                case 0:
+                case RUI.RIGHT:
                     switch (UpDown) {
-                        case 0: return MouseClickRightDetection();
-                        case 1: return MouseClickUpRightDetection();
-                        case 2: return MouseClickDownRightDetection();
+                        case RUI.HOLD: return MouseClickRightDetection();
+                        case RUI.UP  : return MouseClickUpRightDetection();
+                        case RUI.DOWN: return MouseClickDownRightDetection();
                         default: return false;
                     }
-                case 1:
+                case RUI.LEFT:
                     switch (UpDown) {
-                        case 0: return MouseClickLeftDetection();
-                        case 1: return MouseClickUpLeftDetection();
-                        case 2: return MouseClickDownLeftDetection();
+                        case RUI.HOLD: return MouseClickLeftDetection();
+                        case RUI.UP  : return MouseClickUpLeftDetection();
+                        case RUI.DOWN: return MouseClickDownLeftDetection();
                         default: return false;
                     }
                 default:
