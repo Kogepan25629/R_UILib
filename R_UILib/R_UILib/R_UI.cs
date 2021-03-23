@@ -1,6 +1,8 @@
-﻿using DxLibDLL;
+﻿using System;
+using System.Collections.Generic;
+using DxLibDLL;
 
-// Version 0.5.1
+// Version 0.6.0
 
 namespace R_UILib
 {
@@ -199,6 +201,9 @@ namespace R_UILib
         public int X2;
         public int Y1;
         public int Y2;
+        public bool DetectionResult;
+        private int LeftRight;
+        private int UpDown;
 
         // コンストラクタ
         public RUI_ButtonBase()
@@ -207,9 +212,12 @@ namespace R_UILib
             X2 = -1;
             Y1 = -1;
             Y2 = -1;
+            DetectionResult = false;
+            LeftRight = -1;
+            UpDown = -1;
         }
 
-        //座標の設定
+        // 座標の設定
         public void SetPoint(int x1, int y1)
         {
             X1 = x1;
@@ -221,6 +229,63 @@ namespace R_UILib
             Y1 = y1;
             X2 = x2;
             Y2 = y2;
+        }
+
+        public bool DetectOnCursor()
+        {
+            if (X1 == -1 || X2 == -1 || Y1 == -1 || Y2 == -1) {
+                return false;
+            }
+
+            if (MousePointX >= X1 && MousePointX <= X2 && MousePointY >= Y1 && MousePointY <= Y2) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        //// 描画処理
+        public abstract int _Show(bool detectOnCursor);
+
+        //// マウスクリックの判定
+        public bool _DetectMouseClick()
+        {
+            switch (LeftRight) {
+                case RUI.RIGHT:
+                    switch (UpDown) {
+                        case RUI.HOLD: return MouseClickRightDetection();
+                        case RUI.UP:   return MouseClickUpRightDetection();
+                        case RUI.DOWN: return MouseClickDownRightDetection();
+                        default: return false;
+                    }
+                case RUI.LEFT:
+                    switch (UpDown) {
+                        case RUI.HOLD: return MouseClickLeftDetection();
+                        case RUI.UP:   return MouseClickUpLeftDetection();
+                        case RUI.DOWN: return MouseClickDownLeftDetection();
+                        default: return false;
+                    }
+                default:
+                    return false;
+            }
+        }
+
+        protected int _SetDetectionMethod(int leftRight, int upDown)
+        {
+            if (leftRight == RUI.RIGHT || leftRight == RUI.LEFT) {
+                LeftRight = leftRight;
+            }
+            else {
+                return -1;
+            }
+            if (upDown == RUI.HOLD || upDown == RUI.UP || upDown == RUI.DOWN) {
+                UpDown = upDown;
+            }
+            else {
+                return -1;
+            }
+            return 0;
         }
 
         //左クリックの判定
@@ -281,6 +346,154 @@ namespace R_UILib
             }
             else {
                 return false;
+            }
+        }
+    }
+
+    //
+    class RUI_Manager
+    {
+        private List<RUI_ButtonManager> InsList = new List<RUI_ButtonManager>();  // インスタンスを格納するList
+        private List<int> HandleList = new List<int>();                           // インスタンスのHandleを格納するList
+
+        public int Add(RUI_ButtonManager rUI_ButtonManager)
+        {
+            return AddFirst(rUI_ButtonManager);
+        }
+
+        public void Detect(bool reset = false)
+        {
+            foreach (RUI_ButtonManager rUI_ButtonManager in InsList) {
+                if (rUI_ButtonManager.Detect(reset) == true) {
+                    break;
+                }
+            }
+            // 各Listを初期化
+            if (reset == true) {
+                InsList = new List<RUI_ButtonManager>();
+                HandleList = new List<int>();
+            }
+        }
+
+        public void Show()
+        {
+            List<bool> onCursor = new List<bool>();
+            bool detectOnCursor = true;
+
+            for (int i = 0;i < InsList.Count; i++) {
+                if (detectOnCursor == true) {
+                    onCursor.Add(InsList[i].DetectOnCursor());
+                    if (onCursor[i] == true) {
+                        detectOnCursor = false;
+                    }
+                }
+                else {
+                    onCursor.Add(false);
+                }
+            }
+            for (int i = InsList.Count-1; i >= 0; i--) {
+                InsList[i].Show(onCursor[i]);
+            }
+        }
+
+        int tmp = 0;
+        public void Remove(int handle)
+        {
+            foreach (RUI_ButtonManager rUI_ButtonManager in InsList) {
+                rUI_ButtonManager.ResetDetection();
+            }
+            int index = HandleList.IndexOf(handle);
+            HandleList.RemoveAt(index);
+            InsList.RemoveAt(index);
+        }
+
+        private int GenerateHandle()
+        {
+            int count = 0;
+            bool loop = true;
+            while (loop == true) {
+                count++;
+                loop = false;
+                foreach (int lhandle in HandleList) {
+                    if (lhandle == count) {
+                        loop = true;
+                    }
+                }
+            }
+            return count;
+        }
+
+        private int AddFirst(RUI_ButtonManager rUI_ButtonManager)
+        {
+            // インスタンスをListの最初に挿入
+            List<RUI_ButtonManager> tmpIns = new List<RUI_ButtonManager>(InsList);
+            InsList.Clear();
+            InsList.Add(rUI_ButtonManager);
+            InsList.AddRange(tmpIns);
+
+            // インスタンスに対応するHandleをListの最初に挿入
+            List<int> tmpHandle = new List<int>(HandleList);
+            //HandleList = new List<int>();
+            int handle = GenerateHandle();
+            HandleList.Clear();
+            HandleList.Add(handle);
+            HandleList.AddRange(tmpHandle);
+            return handle;
+        }
+    }
+
+    //
+    class RUI_ButtonManager
+    {
+        //
+        private List<RUI_ButtonBase> InsList = new List<RUI_ButtonBase>();  // インスタンスを格納するList
+        //private List<bool> DetList = new List<bool>();                      // 判定の結果を格納するList
+
+        public void Add(RUI_ButtonBase rUI_ButtonBase)
+        {
+            InsList.Add(rUI_ButtonBase);
+        }
+
+        public bool Detect(bool reset = false)
+        {
+            bool funResult = false;
+            foreach (RUI_ButtonBase rUI_ButtonBase in InsList) {
+                rUI_ButtonBase.DetectionResult = rUI_ButtonBase._DetectMouseClick();
+                if (rUI_ButtonBase.DetectionResult == true) {
+                    funResult = true;
+                }
+            }
+
+            // 各Listを初期化
+            if (reset == true) {
+                InsList = new List<RUI_ButtonBase>();
+                //DetList = new List<bool>();
+            }
+
+            return funResult;
+        }
+
+        public bool DetectOnCursor()
+        {
+            foreach (RUI_ButtonBase rUI_ButtonBase in InsList) {
+                if (rUI_ButtonBase.DetectOnCursor() == true) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        public void ResetDetection()
+        {
+            foreach (RUI_ButtonBase rUI_ButtonBase in InsList) {
+                rUI_ButtonBase.DetectionResult = false;
+            }
+        }
+        
+        public void Show(bool detectOnCursor)
+        {
+            foreach (RUI_ButtonBase rUI_ButtonBase in InsList) {
+                rUI_ButtonBase._Show(detectOnCursor);
             }
         }
     }
@@ -363,7 +576,7 @@ namespace R_UILib
         }
 
         // PRIVATE
-        private int _ChangeSizeToString()
+        private int ChangeSizeToString()
         {
             if (MatchSizeToString == true) {
                 if (Str == "" || StringWidth == -1 || StringHeight == -1) {
@@ -375,11 +588,11 @@ namespace R_UILib
             return 0;
         }
 
-        //ボタン描画
-        public int Show()
+        //// ボタン描画
+        public override int _Show(bool onCursor)
         {
             // ボタンサイズを文字列に合わせる(モードによる)
-            if (_ChangeSizeToString() == -1) {
+            if (ChangeSizeToString() == -1) {
                 return -1;
             }
             // 値が設定されていない場合は終了
@@ -391,7 +604,7 @@ namespace R_UILib
             if (GrHandle != -1) {
                 if (OnCursorChangeImage == true) {
                     if (GrHandle2 != -1) {
-                        if (MousePointX >= X1 && MousePointX <= X2 && MousePointY >= Y1 && MousePointY <= Y2) {
+                        if (DetectOnCursor() == true && onCursor == true) {
                             DX.DrawExtendGraph(X1, Y1, X2, Y2, GrHandle2, DX.TRUE);
                         }
                         else {
@@ -403,7 +616,7 @@ namespace R_UILib
                     }
                 }
                 else if (OnCursorHighlight == true) {
-                    if (MousePointX >= X1 && MousePointX <= X2 && MousePointY >= Y1 && MousePointY <= Y2) {
+                    if (DetectOnCursor() == true && onCursor == true) {
                         DX.DrawExtendGraph(X1, Y1, X2, Y2, RUI_Data.GrHandleWhite, DX.TRUE);
                     }
                     else {
@@ -429,33 +642,29 @@ namespace R_UILib
             return 0;
         }
 
-        //// マウスクリックの判定
+        public int Show()
+        {
+            return _Show(true);
+        }
 
+        //// マウスクリックの判定
         public bool DetectMouseClick(int LeftRight, int UpDown)
         {
             // ボタンサイズを文字列に合わせる(モードにより)
-            if (_ChangeSizeToString() == -1) {
+            if (ChangeSizeToString() == -1) {
                 return false;
             }
-            switch (LeftRight) {
-                case RUI.RIGHT:
-                    switch (UpDown) {
-                        case RUI.HOLD: return MouseClickRightDetection();
-                        case RUI.UP  : return MouseClickUpRightDetection();
-                        case RUI.DOWN: return MouseClickDownRightDetection();
-                        default: return false;
-                    }
-                case RUI.LEFT:
-                    switch (UpDown) {
-                        case RUI.HOLD: return MouseClickLeftDetection();
-                        case RUI.UP  : return MouseClickUpLeftDetection();
-                        case RUI.DOWN: return MouseClickDownLeftDetection();
-                        default: return false;
-                    }
-                default:
-                    return false;
-            }
+            _SetDetectionMethod(LeftRight, UpDown);
+            return _DetectMouseClick();
+        }
+
+        // 判定の設定
+        public int SetDetectionMethod(int LeftRight, int UpDown)
+        {
+            return _SetDetectionMethod(LeftRight, UpDown);
         }
     }
 }
+
+// 
 
