@@ -11,7 +11,7 @@ namespace R_RPG
     {
         static void Main()
         {
-            Class2.class2();
+            test.class2();
         }
     }
 }
