@@ -45,16 +45,21 @@ namespace R_RPG
             int FontHandle = DX.CreateFontToHandle(null, -1, -1);
 
             int grhandle = DX.LoadGraph("Texture\\diamond_block.png");
+            int grhandle2 = DX.LoadGraph("Texture\\emerald_block.png");
 
             RUI.R_UILibInit();
+            
             /*
-            RUI_Button Button1 = new RUI_Button(false, true);
+            RUI_Button Button1 = new RUI_Button();
+            Button1.SetAllMode(false, true, false);
             Button1.X1 = 3;
             Button1.SetPoint(0, 0, 100, 100);
             Button1.GrHandle = grhandle;
             Button1.FontHandle = FontHandle;
             Button1.SetString("おはよう");
             */
+            
+            
             RUI_Button[] buttons = new RUI_Button[10];
             RUI_ButtonManager[] buttonManagers = new RUI_ButtonManager[10];
             RUI_Manager rUI_Manager = new RUI_Manager();
@@ -62,14 +67,15 @@ namespace R_RPG
             {
                 int i = 0;
                 foreach (RUI_Button rUI_Button in buttons) {
-                    buttons[i] = new RUI_Button(false, true);
+                    buttons[i] = new RUI_Button();
                     i++;
                 }
                 i = 0;
                 foreach (RUI_Button rUI_Button in buttons) {
-                    rUI_Button.X1 = 3;
+                    rUI_Button.SetAllMode(false, true, true);
                     rUI_Button.SetPoint(0+i*5, 0+i*5, 100+i*5, 100+i*5);
                     rUI_Button.GrHandle = grhandle;
+                    rUI_Button.GrHandle2 = grhandle2;
                     rUI_Button.FontHandle = FontHandle;
                     rUI_Button.SetString("おはよう");
                     rUI_Button.SetDetectionMethod(RUI.LEFT, RUI.UP);
@@ -90,12 +96,14 @@ namespace R_RPG
                     i++;
                 }
             }
+            
 
             
 
             while (DX.ScreenFlip() == 0 && DX.ProcessMessage() == 0 && DX.ClearDrawScreen() == 0)
             {
                 RUI.UptadeMouseState();
+                
                 foreach (RUI_Button rUI_Button in buttons) {
                 }
                 rUI_Manager.Detect();
@@ -110,6 +118,8 @@ namespace R_RPG
                         i++;
                     }
                 }
+                
+                
                 /*
                 Button1.Show();
                 if (Button1.DetectMouseClick(RUI.LEFT, RUI.UP) == true)

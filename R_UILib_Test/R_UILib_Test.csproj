@@ -5,4 +5,10 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="R_UILibDLL">
+      <HintPath>..\R_UILibDLL\bin\Debug\net5.0\R_UILibDLL.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
