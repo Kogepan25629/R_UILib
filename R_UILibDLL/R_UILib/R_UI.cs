@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using DxLibDLL;
 
-// Version 0.6.1
+// Version 0.6.2
 
 namespace R_UILib
 {
@@ -446,7 +446,7 @@ namespace R_UILib
         public const int DOWN = 2;
         // マウス情報の更新
         // 毎フレーム呼び出しする必要がある
-        public static new void UptadeMouseState()
+        public static void UptadeMouseState()
         {
             RUI_MouseData.UptadeMouseState();
         }
